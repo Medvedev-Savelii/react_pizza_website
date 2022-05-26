@@ -4,6 +4,12 @@ function Sort() {
   const [open, setOpen] = useState(false);
   const [sort, setSort] = useState(0);
   const sorts = ["популярности", "цене", "алфавиту"];
+
+  const onClickPopope = (i) => {
+    setSort(i);
+    setOpen(false);
+  };
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -22,12 +28,12 @@ function Sort() {
         <b>Сортировка по:</b>
         <span onClick={() => setOpen(!open)}>{sorts[sort]}</span>
       </div>
-      {open === true ? null : (
+      {open && (
         <div className="sort__popup">
           <ul>
             {sorts.map((sort, i) => (
               <li
-                onClick={() => setSort(i)}
+                onClick={() => onClickPopope(i)}
                 key={i}
                 className={sort === i ? "active" : ""}
               >
