@@ -4,6 +4,7 @@ function Sort() {
   const [open, setOpen] = useState(false);
   const [sort, setSort] = useState(0);
   const sorts = ["популярности", "цене", "алфавиту"];
+  const sortName = sorts[sort];
 
   const onClickPopope = (i) => {
     setSort(i);
@@ -26,7 +27,7 @@ function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(!open)}>{sorts[sort]}</span>
+        <span onClick={() => setOpen(!open)}>{sortName}</span>
       </div>
       {open && (
         <div className="sort__popup">
