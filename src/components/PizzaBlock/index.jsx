@@ -61,4 +61,4 @@ function PizzaBlock(props) {
   );
 }
 
-export { PizzaBlock };
+export default PizzaBlock;
