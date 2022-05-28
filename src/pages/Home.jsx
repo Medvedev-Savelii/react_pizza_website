@@ -16,7 +16,9 @@ function Home() {
     setIsLoading(true);
 
     fetch(
-      "https://629026d227f4ba1c65b49bdc.mockapi.io/items?category=" + categotyId
+      `https://629026d227f4ba1c65b49bdc.mockapi.io/items?${
+        categotyId > 0 ? `category=${categotyId}` : ""
+      }&sortBy=${sortType.sortProperty}&order=desc`
     )
       .then((res) => res.json())
       .then((array) => {

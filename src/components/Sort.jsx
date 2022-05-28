@@ -37,9 +37,11 @@ function Sort({ value, onClickSort }) {
           <ul>
             {sorts.map((obj, i) => (
               <li
-                onClick={() => onClickPopope(obj.sortProperty)}
+                onClick={() => onClickPopope(obj)}
                 key={i}
-                className={value === i ? "active" : ""}
+                className={
+                  value.sortProperty === obj.sortProperty ? "active" : ""
+                }
               >
                 {obj.name}
               </li>
