@@ -2,11 +2,13 @@ import React, { useState } from "react";
 
 function Sort({ value, onClickSort }) {
   const [open, setOpen] = useState(false);
-  const [sort, setSort] = useState(0);
   const sorts = [
-    { name: "популярности", sortProperty: "rating" },
-    { name: "цене", sortProperty: "price" },
-    { name: "алфавиту", sortProperty: "title" },
+    { name: "популярности (DESC)", sortProperty: "rating" },
+    { name: "популярности (ASC)", sortProperty: "-rating" },
+    { name: "цене (DESC)", sortProperty: "price" },
+    { name: "цене (ASC)", sortProperty: "-price" },
+    { name: "алфавиту (DESC)", sortProperty: "title" },
+    { name: "алфавиту (ASC)", sortProperty: "-title" },
   ];
 
   const onClickPopope = (i) => {
