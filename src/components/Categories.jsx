@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 function Categories({ value, onClickCategory }) {
   const categories = [
@@ -9,8 +9,6 @@ function Categories({ value, onClickCategory }) {
     "Острые",
     "Закрытые",
   ];
-
-
 
   return (
     <div className="categories">
