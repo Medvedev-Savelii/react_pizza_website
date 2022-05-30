@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setCategoryId } from "../redux/slices/filterSlice";
 import { Categories } from "../components/Categories";
 import { Sort } from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
@@ -7,23 +9,24 @@ import Pagination from "../components/Pagination";
 import { SearchContext } from "../App";
 
 function Home() {
-  const { searchValue } = React.useContext(SearchContext);
+  const categoryId = useSelector((state) => state.filter.categoryId);
+  const sortType = useSelector((state) => state.filter.sort.sortProperty);
+  const dispatch = useDispatch();
 
+  const { searchValue } = React.useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [categotyId, setCategotyId] = useState(0);
   const [currentPage, setCarrentPage] = useState(1);
 
-  const [sortType, setSortType] = useState({
-    name: "популярности",
-    sortProperty: "rating",
-  });
+  const onClickCategory = (id) => {
+    dispatch(setCategoryId(id));
+  };
 
   useEffect(() => {
     setIsLoading(true);
-    const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
-    const sortBy = sortType.sortProperty.replace("-", "");
-    const category = categotyId > 0 ? `category=${categotyId}` : "";
+    const order = sortType.includes("-") ? "asc" : "desc";
+    const sortBy = sortType.replace("-", "");
+    const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
 
     fetch(
@@ -35,7 +38,7 @@ function Home() {
         setIsLoading(false);
         window.scrollTo(0, 0);
       });
-  }, [categotyId, sortType, searchValue, currentPage]);
+  }, [categoryId, sortType, searchValue, currentPage]);
 
   const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
   const skeletons = [...new Array(6)].map((_, id) => <Skeleton key={id} />);
@@ -43,11 +46,8 @@ function Home() {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories
-          value={categotyId}
-          onClickCategory={(id) => setCategotyId(id)}
-        />
-        <Sort value={sortType} onClickSort={(id) => setSortType(id)} />
+        <Categories value={categoryId} onClickCategory={onClickCategory} />
+        <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">{isLoading ? skeletons : pizzas}</div>
