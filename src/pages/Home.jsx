@@ -13,20 +13,21 @@ import { Sort } from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
-import { SearchContext } from "../App";
 import { sorts } from "../components/Sort";
 
 function Home() {
   const categoryId = useSelector((state) => state.filter.categoryId);
-  const sortType = useSelector((state) => state.filter.sort.sortProperty);
+  const sort = useSelector((state) => state.filter.sort.sortProperty);
+  const searchValue = useSelector((state) => state.filter.searchValue);
+
   const currentPage = useSelector((state) => state.filter.currentPage);
+
   const { items, status } = useSelector((state) => state.pizza);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
-  const { searchValue } = React.useContext(SearchContext);
 
   const onClickCategory = (id) => {
     dispatch(setCategoryId(id));
@@ -36,8 +37,8 @@ function Home() {
   };
 
   const getPizzas = async () => {
-    const order = sortType.includes("-") ? "asc" : "desc";
-    const sortBy = sortType.replace("-", "");
+    const order = sort.includes("-") ? "asc" : "desc";
+    const sortBy = sort.replace("-", "");
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
 
@@ -56,14 +57,14 @@ function Home() {
   useEffect(() => {
     if (isMounted.current) {
       const queryString = qs.stringify({
-        sortProperty: sortType,
+        sortProperty: sort,
         categoryId,
         currentPage,
       });
       navigate(`?${queryString}`);
     }
     isMounted.current = true;
-  }, [categoryId, sortType, searchValue, currentPage]);
+  }, [categoryId, sort, searchValue, currentPage]);
   // Если БЫЛ первый рендер, то проверяем url-ПАРАМЕТРЫ и добовляем в REDUX
   useEffect(() => {
     if (window.location.search) {
@@ -89,7 +90,7 @@ function Home() {
       getPizzas();
     }
     isSearch.current = false;
-  }, [categoryId, sortType, searchValue, currentPage]);
+  }, [categoryId, sort, searchValue, currentPage]);
 
   const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
   const skeletons = [...new Array(6)].map((_, id) => <Skeleton key={id} />);
