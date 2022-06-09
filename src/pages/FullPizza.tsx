@@ -2,8 +2,12 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
-const FullPizza = () => {
-  const [pizza, setPizza] = useState();
+const FullPizza: React.FC = () => {
+  const [pizza, setPizza] = useState<{
+	  imageUrl: string;
+	  title: string;
+	  price: number;
+  }>();
   const { id } = useParams();
 
   React.useEffect(() => {
@@ -14,7 +18,7 @@ const FullPizza = () => {
         );
         setPizza(data);
       } catch (error) {
-        error("Error fetch data pizzas");
+		  console.error(error);
       }
     }
     fetchPizzas();
@@ -23,7 +27,7 @@ const FullPizza = () => {
   if (!pizza) {
     return (
       <div>
-        <h1>Loading...</h1>;
+        <h1>Loading...</h1>
       </div>
     );
   }

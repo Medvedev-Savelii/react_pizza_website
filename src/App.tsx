@@ -4,7 +4,6 @@ import NotFound from "./pages/NotFound";
 import FullPizza from "./pages/FullPizza";
 import Cart from "./pages/Cart";
 import { Routes, Route } from "react-router-dom";
-
 import "./scss/app.scss";
 import MyLayout from "./layout/MyLayout";
 
