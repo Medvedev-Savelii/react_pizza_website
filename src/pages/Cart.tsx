@@ -5,9 +5,10 @@ import CartItem from "../components/CartItem";
 import { Link } from "react-router-dom";
 import CartEmpty from "../components/CartEmpty";
 import { selectCart } from "../redux/slices/cartSlice";
-function Cart() {
+
+const Cart:React.FC = () => {
   const { totalPrice, items } = useSelector(selectCart);
-  const totalCount = items.reduce((sum, item) => sum + item.count, 0);
+  const totalCount = items.reduce((sum:number, item: any) => sum + item.count, 0);
 
   const dispatch = useDispatch();
   const onClickClear = () => {
@@ -20,7 +21,7 @@ function Cart() {
 
   return (
     <div className="container container--cart">
-      <div classNameName="cart">
+      <div className="cart">
         <div className="cart__top">
           <h2 className="content__title">
             <svg
@@ -96,7 +97,7 @@ function Cart() {
           </div>
         </div>
         <div className="wrapper__items">
-          {items.map((item) => (
+          {items.map((item:any) => (
             <CartItem {...item} key={item.id} />
           ))}
         </div>
