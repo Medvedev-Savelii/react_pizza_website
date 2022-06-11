@@ -3,17 +3,21 @@ import React, { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
+	FilterSliceState,
   setCategoryId,
   setCurrentPage,
   setFilters,
+  
 } from "../redux/slices/filterSlice";
-import { fetchPizzas } from "../redux/slices/pizzaSlice";
+import { fetchPizzas, SearchPizzaParams } from "../redux/slices/pizzaSlice";
 import { Categories } from "../components/Categories";
-import { Sort } from "../components/Sort";
+import { SortPopup } from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 import { sorts } from "../components/Sort";
+import { useAppDispatch } from "../redux/store";
+
 
 const Home:React.FC = () => {
 	//@ts-ignore
@@ -28,7 +32,7 @@ const Home:React.FC = () => {
   const { items, status } = useSelector((state) => state.pizza);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
@@ -46,7 +50,6 @@ const Home:React.FC = () => {
     const search = searchValue ? `&search=${searchValue}` : "";
 
     dispatch(
-		//@ts-ignore
       fetchPizzas({
         order,
         sortBy,
@@ -58,38 +61,42 @@ const Home:React.FC = () => {
   };
 
   // Если изменили параметры и был первый рендер
-  useEffect(() => {
-    if (isMounted.current) {
-      const queryString = qs.stringify({
-        sortProperty: sort,
-        categoryId,
-        currentPage,
-      });
-      navigate(`?${queryString}`);
-    }
-    isMounted.current = true;
-  }, [categoryId, sort, searchValue, currentPage]);
-  // Если БЫЛ первый рендер, то проверяем url-ПАРАМЕТРЫ и добовляем в REDUX
-  useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-      const sort = sorts.find(
-        (obj) => obj.sortProperty === params.sortProperty
-      );
+//   useEffect(() => {
+//     if (isMounted.current) {
+//       const queryString = qs.stringify({
+//         sortProperty: sort,
+//         categoryId,
+//         currentPage,
+//       });
+//       navigate(`/?${queryString}`);
+//     }
 
-      dispatch(
-        setFilters({
-          ...params,
-          sort,
-        })
-      );
-      isSearch.current = true;
-    }
-  }, []);
+// 	if(!window.location.search) {
+// 		dispatch(fetchPizzas({} as SearchPizzaParams ))
+// 	}
+//     isMounted.current = true;
+//   }, [categoryId, sort, searchValue, currentPage]);
+  // Если БЫЛ первый рендер, то проверяем url-ПАРАМЕТРЫ и добовляем в REDUX
+//   useEffect(() => {
+//     if (window.location.search) {
+//       const params: SearchPizzaParams = (qs.parse(window.location.search.substring(1)) as unknown) as SearchPizzaParams;
+//       const sort = sorts.find(
+//         (obj) => obj.sortProperty === params.sortBy
+//       );
+//       dispatch(
+//         setFilters({
+//           	searchValue: params.search,
+// 			categoryId: Number(params.category),
+// 			currentPage: Number(params.currentPage),
+//          	sort:  sort || sorts[0],
+//         })
+//       );
+//       isSearch.current = true;
+//     }
+//   }, []);
   // Если БЫЛ первый рендер,ТО ЗАПРАШИВАЕМ ПИЦЦЫ
   useEffect(() => {
     window.scrollTo(0, 0);
-
     if (!isSearch.current) {
       getPizzas();
     }
@@ -97,9 +104,7 @@ const Home:React.FC = () => {
   }, [categoryId, sort, searchValue, currentPage]);
 
   const pizzas = items.map((obj:any) => (
-    <Link key={obj.id} to={`/pizza/${obj.id}`}>
       <PizzaBlock {...obj} />
-    </Link>
   ));
   const skeletons = [...new Array(6)].map((_, id) => <Skeleton key={id} />);
 
@@ -107,7 +112,7 @@ const Home:React.FC = () => {
     <div className="container">
       <div className="content__top">
         <Categories value={categoryId} onClickCategory={onClickCategory} />
-        <Sort />
+        <SortPopup />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
