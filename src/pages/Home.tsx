@@ -36,9 +36,9 @@ const Home:React.FC = () => {
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
-  const onClickCategory = (id:number) => {
+  const onClickCategory = React.useCallback((id:number) => {
     dispatch(setCategoryId(id));
-  };
+  }, []);
   const onChangePage = (number:number) => {
     dispatch(setCurrentPage(number));
   };
@@ -104,7 +104,7 @@ const Home:React.FC = () => {
   }, [categoryId, sort, searchValue, currentPage]);
 
   const pizzas = items.map((obj:any) => (
-      <PizzaBlock {...obj} />
+      <PizzaBlock key={obj.id} {...obj} />
   ));
   const skeletons = [...new Array(6)].map((_, id) => <Skeleton key={id} />);
 
