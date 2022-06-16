@@ -10,8 +10,8 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 import { sorts } from "../components/Sort";
 import { useAppDispatch } from "../redux/store";
-import { setCategoryId, setCurrentPage } from "../redux/filter/filterSlice";
-import { fetchPizzas } from "../redux/pizza/pizzaSlice";
+import { setCategoryId, setCurrentPage } from "../redux/filter/slice";
+import { fetchPizzas } from "../redux/pizza/asyncActions";
 
 
 const Home:React.FC = () => {
