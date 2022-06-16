@@ -1,7 +1,6 @@
 import axios from "axios";
-import { RootState } from "../store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { Sort } from "./filterSlice";
+import { RootState } from "../store";
 
 export type SearchPizzaParams = {
 	sortBy: string;
